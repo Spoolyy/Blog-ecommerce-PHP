@@ -63,10 +63,10 @@ $isDenied = false;
         </div>
         <div id="website" class="grid grid-cols-4 gap-4 mt-6">
             <div id="main-left" class="col-span-3 bg-gray-200 px-6 py-4 rounded-lg shadow-lg flex flex-col p-4 space-y-4">
-                <p class="text-2xl">Hello /user/, here are today's recommended items</p>
-                <div id="item1" class="flex bg-gray-300 rounded-lg p-4 space-x-8 justify-between">
+                <p class="text-2xl font-semibold">Hello /user/, here are today's recommended products</p>
+                <div id="item1" class="flex bg-gray-300 rounded-lg p-4 space-x-8 justify-between shadow-lg">
                     <div class="flex items-center">
-                        <img src="../images/nfs-Unbound.png" alt="Image" class="rounded-lg w-[700px] object-cover">
+                        <img src="../images/categories/nfs-Unbound.png" alt="Image" class="rounded-lg w-[700px] object-cover">
                     </div>
                     <div class="space-y-4">
                         <p class="text-3xl">Item Name 1</p>
@@ -74,9 +74,9 @@ $isDenied = false;
                     </div>
                     <button>Check it out</button>
                 </div>
-                <div id="item2" class="flex bg-gray-300 rounded-lg p-4 space-x-8 justify-between">
+                <div id="item2" class="flex bg-gray-300 rounded-lg p-4 space-x-8 justify-between shadow-lg">
                     <div class="flex items-center">
-                        <img src="../images/nfs-Unbound.png" alt="Image" class="rounded-lg w-[700px] object-cover">
+                        <img src="../images/categories/nfs-Unbound.png" alt="Image" class="rounded-lg w-[700px] object-cover">
                     </div>
                     <div class="space-y-4">
                         <p class="text-3xl">Item Name 2</p>
@@ -84,9 +84,9 @@ $isDenied = false;
                     </div>
                     <button>Check it out</button>
                 </div>
-                <div id="item3" class="flex bg-gray-300 rounded-lg p-4 space-x-8 justify-between">
+                <div id="item3" class="flex bg-gray-300 rounded-lg p-4 space-x-8 justify-between shadow-lg">
                     <div class="flex items-center">
-                        <img src="../images/nfs-Unbound.png" alt="Image" class="rounded-lg w-[700px] object-cover">
+                        <img src="../images/categories/nfs-Unbound.png" alt="Image" class="rounded-lg w-[700px] object-cover">
                     </div>
                     <div class="space-y-4">
                         <p class="text-3xl">Item Name 3</p>
@@ -94,10 +94,17 @@ $isDenied = false;
                     </div>
                     <button>Check it out</button>
                 </div>
-                
+
             </div>
-            <div id="main-right">
-                <div class="col-span-1 space-y-2 bg-gray-200 px-6 py-4 rounded-lg shadow-lg">
+            <div id="main-right" class="col-span-1 space-y-4">
+                <div class="space-y-2 bg-gray-200 px-6 py-4 rounded-lg shadow-lg flex flex-col justify-center">
+                    <p class="font-semibold text-lg">Search Products:</p>
+                        <form action="search.php" method="post" class="flex justify-between space-x-4">
+                            <input type="text" name="search" id="searchbar" class="rounded-lg w-full p-2 shadow-lg">
+                            <button class="px-4 py-2 bg-cyan-100 rounded-lg shadow-lg">Go!</button>
+                        </form>
+                </div>
+                <div class="space-y-2 bg-gray-200 px-6 py-4 rounded-lg shadow-lg">
                     <p class="font-semibold text-lg">Trending Categories</p>
                     <div class="p-2 border-y border-gray-300">
                         <p>Category1</p>

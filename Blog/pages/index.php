@@ -1,4 +1,6 @@
 <?php
+require_once('isLogged.php');
+
 setcookie("user", "Alessio Simeone", time() - 86400, "/");
 $isAccepted = false;
 $isDenied = false;
@@ -59,7 +61,7 @@ $isDenied = false;
                 <p class="font-semibold hover:scale-105 duration-200">Products</p>
                 <p class="font-semibold hover:scale-105 duration-200">Categories</p>
             </div>
-            <button>Login</button>
+            <button class="hover:scale-105 duration-200 hover:font-semibold"><a href="#">Profile</a></button>
         </div>
         <div id="website" class="grid grid-cols-4 gap-4 mt-6">
             <div id="main-left" class="col-span-3 bg-gray-200 px-6 py-4 rounded-lg shadow-lg flex flex-col p-4 space-y-4">

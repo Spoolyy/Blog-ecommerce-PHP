@@ -1,5 +1,5 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-    header("Location: loginpage.php");
+    header("Location: /pages/loginpage.php");
 }

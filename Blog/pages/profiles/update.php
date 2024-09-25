@@ -1,24 +1,35 @@
 <?php
 require_once("../../config/config.php");
+require_once("../isLogged.php");
 // Establish the PDO connection
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+$pdo = new PDO("mysql:host=$host;dbname=$dbname", "$username", "$password");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 try {
     // Validate and sanitize inputs
-    $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
-    $name = htmlspecialchars(trim($_POST["name"] ?? ''));
-    $description = htmlspecialchars(trim($_POST["description"] ?? ''));
-    $price = filter_input(INPUT_POST, "price", FILTER_VALIDATE_FLOAT);
-    $stock = filter_input(INPUT_POST, "stock", FILTER_VALIDATE_INT);
-    $category_id = filter_input(INPUT_POST, "category_id", FILTER_VALIDATE_INT);
+    $firstname = htmlspecialchars($_POST['firstname']);
+    $lastname = htmlspecialchars($_POST['lastname']);
+    $date = htmlspecialchars($_POST['age']);
+    $user_id = $_SESSION['id'];
+    if (DateTime::createFromFormat('Y-m-d', $date)) {
+        // Valid date format
+        echo "The date is valid.";
+    } else {
+        // Invalid date format
+        echo "The date is invalid.";
+    }
+    var_dump($date);
+    $targetfolder = "../../images/profiles";
+    $targetfile = $targetfolder . basename($_FILES['file']['name']);
+    $fileExtension = strtolower(pathinfo($targetfile, PATHINFO_EXTENSION));
+    $isImage = getimagesize($_FILES['file']['tmp_name']);
+    $canBeUploaded = true;
 
-    // Check if inputs are valid
-    if ($id === false || $price === false || $stock === false || $category_id === false || empty($name) || empty($description)) {
+    if ($date === false || empty($firstname) || empty($lastname)) {
         throw new Exception("Invalid input data.");
     }
 
     // File upload handling
-    $targetfolder = "../../images/products/";
+    $targetfolder = "../../images/profiles/";
     $image = null;
 
     if (!empty($_FILES['file']['name'])) {
@@ -46,22 +57,18 @@ try {
     }
 
     // Prepare and execute the SQL query
-    $query = "UPDATE products SET 
-                name = :name, 
-                description = :description, 
-                price = :price, 
-                stock = :stock, 
-                category_id = :category_id" .
+    $query = "UPDATE profiles SET 
+            firstname = :firstname, 
+            lastname = :lastname, 
+            age = :date" .
         ($image ? ", image = :image" : "") .
-        " WHERE id = :id";
+        " WHERE user_id = :user_id";
 
     $parameters = [
-        ":id" => $id,
-        ":name" => $name,
-        ":description" => $description,
-        ":price" => $price,
-        ":stock" => $stock,
-        ":category_id" => $category_id
+        ":firstname" => $firstname,
+        ":lastname" => $lastname,
+        ":date" => $date,
+        ":user_id" => $user_id
     ];
 
     if ($image) {
@@ -72,7 +79,7 @@ try {
     $result = $statement->execute($parameters);
 
     if ($result) {
-        echo "Product modified successfully.";
+        echo "Changes applied.";
     } else {
         throw new Exception("Failed to update the product.");
     }

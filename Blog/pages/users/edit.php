@@ -7,11 +7,15 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 //var_dump($_POST);
 $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
-$query = "SELECT * FROM users WHERE id = :id";
-$parameters = ["id" => $id];
-$statement = $pdo->prepare($query);
-$result = $statement->execute($parameters);
-$users = $statement->fetchAll(PDO::FETCH_ASSOC);
+if (isset($id)) {
+    $query = "SELECT * FROM users WHERE id = :id";
+    $parameters = ["id" => $id];
+    $statement = $pdo->prepare($query);
+    $result = $statement->execute($parameters);
+    $users = $statement->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    header("Location: index.php");
+}
 
 //var_dump($users);
 //header("Location: index.php");

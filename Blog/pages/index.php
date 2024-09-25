@@ -61,7 +61,7 @@ $isDenied = false;
                 <p class="font-semibold hover:scale-105 duration-200">Products</p>
                 <p class="font-semibold hover:scale-105 duration-200">Categories</p>
             </div>
-            <button class="hover:scale-105 duration-200 hover:font-semibold"><a href="#">Profile</a></button>
+            <button class="hover:scale-105 duration-200 hover:font-semibold"><a href="profiles/edit.php">Profile</a></button>
         </div>
         <div id="website" class="grid grid-cols-4 gap-4 mt-6">
             <div id="main-left" class="col-span-3 bg-gray-200 px-6 py-4 rounded-lg shadow-lg flex flex-col p-4 space-y-4">
@@ -101,10 +101,10 @@ $isDenied = false;
             <div id="main-right" class="col-span-1 space-y-4">
                 <div class="space-y-2 bg-gray-200 px-6 py-4 rounded-lg shadow-lg flex flex-col justify-center">
                     <p class="font-semibold text-lg">Search Products:</p>
-                        <form action="search.php" method="post" class="flex justify-between space-x-4">
-                            <input type="text" name="search" id="searchbar" class="rounded-lg w-full p-2 shadow-lg">
-                            <button class="px-4 py-2 bg-cyan-100 rounded-lg shadow-lg">Go!</button>
-                        </form>
+                    <form action="search.php" method="post" class="flex justify-between space-x-4">
+                        <input type="text" name="search" id="searchbar" class="rounded-lg w-full p-2 shadow-lg">
+                        <button class="px-4 py-2 bg-cyan-100 rounded-lg shadow-lg">Go!</button>
+                    </form>
                 </div>
                 <div class="space-y-2 bg-gray-200 px-6 py-4 rounded-lg shadow-lg">
                     <p class="font-semibold text-lg">Trending Categories</p>

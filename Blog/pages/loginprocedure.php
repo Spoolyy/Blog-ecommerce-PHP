@@ -18,6 +18,8 @@ if (count($userVerified) == 1) {
         session_start();
         $_SESSION['id'] = $userVerified[0]['id'];
         $_SESSION['username'] = $userVerified[0]['username'];
+        $_SESSION['role'] = $userVerified[0]['role'];
+        $_SESSION['cart'] = [];
         header('Location: index.php');
     }
     else {

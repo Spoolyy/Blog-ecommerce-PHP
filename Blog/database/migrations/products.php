@@ -15,7 +15,3 @@ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)";
 
 $pdo->exec($createProductsTable);
 echo 'Table created successfully';
-
-// $temporary = 'ALTER TABLE table_name ADD COLUMN column_name type after existing_column';
-// $pdo->exec($temporary);
-// echo 'Table created successfully';

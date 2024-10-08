@@ -11,11 +11,22 @@ $statement->bindParam(':itemID', $itemID, PDO::PARAM_INT);
 $statement->execute();
 $price = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-$_SESSION['cart'][] = ['id'=> $_POST['product'], 'price'=> $price[0]['price']];
-$cartTotalPrice = 0;
-foreach ($_SESSION['cart'] as $product) {
-    $cartTotalPrice += $product['price'];
+$alreadyInCart = false;
+foreach ($_SESSION['cart'] as &$item) {
+    if ($item['id'] == $itemID) {
+        $item['quantity'] += 1;
+        $alreadyInCart = true;
+    }
+}
+if ($alreadyInCart == false) {
+    $_SESSION['cart'][] = ['id'=> $_POST['product'], 'price'=> $price[0]['price'], 'quantity' => 1 ];
 }
 
-$itemsInCart = ['count'=> count($_SESSION['cart']), 'price'=> $cartTotalPrice];
-echo json_encode($itemsInCart);
+$quantity = 0;
+$cartTotalPrice = 0;
+foreach ($_SESSION['cart'] as $product) {
+    $cartTotalPrice += $product['price'] * $product['quantity'];
+    $quantity += $product['quantity'];
+}
+$itemsInCart = ['count'=> $quantity, 'price' => $cartTotalPrice];
+echo json_encode($itemsInCart);;

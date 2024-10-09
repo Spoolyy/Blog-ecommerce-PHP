@@ -1,8 +1,21 @@
 <?php
-require_once('isLogged.php');
-require_once("../config/config.php");
+require_once('../isLogged.php');
+require_once("../../config/config.php");
 $pdo = new PDO("mysql:host=$host;dbname=$dbname", "$username", "$password");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$query = 'SELECT 
+products.id as id, 
+products.name as name, 
+products.description as description, 
+products.price as price,
+products.image as image
+FROM wishlists INNER JOIN products ON wishlists.product_id = products.id WHERE wishlists.user_id = :user_id';
+$statement->bindParam(':user_ID', $_SESSION['id'], PDO::PARAM_INT);
+$statement = $pdo->prepare($query);
+$statement->execute();
+$productInWishlist = $statement->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,39 +59,35 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         <div id="navbar" class="w-full bg-gray-200 flex justify-between items-center px-4 py-6 rounded-b-lg text-lg shadow-lg">
             <Div>Blogmerce.com</Div>
             <div class="flex space-x-4">
-                <p class="font-semibold hover:scale-105 duration-200"><a href="./index.php">Home</a></p>
-                <p class="font-semibold hover:scale-105 duration-200"><a href="./categories/index.php">Categories</a></p>
+                <p class="font-semibold hover:scale-105 duration-200"><a href="../index.php">Home</a></p>
+                <p class="font-semibold hover:scale-105 duration-200"><a href="../categories/index.php">Categories</a></p>
             </div>
-            <button class="hover:scale-105 duration-200 hover:font-semibold"><a href="profiles/edit.php">Profile</a></button>
+            <button class="hover:scale-105 duration-200 hover:font-semibold"><a href="../profiles/edit.php">Profile</a></button>
         </div>
         <div id="website" class="grid grid-cols-4 gap-4 mt-6">
             <div id="main-left" class="col-span-3 bg-gray-200 px-6 py-4 rounded-lg shadow-lg flex flex-col p-4 space-y-4">
                 <?php
-                if (count($_SESSION['cart']) == 0) {
+                if (count($productInWishlist) == 0) {
                 ?>
-                    <p class="text-2xl font-semibold">Hello /user/, there are no items in your cart.</p>
+                    <p class="text-2xl font-semibold">Hello /user/, there are no items in your wishlist.</p>
+                    <p>You can wishlist items by clicking the hearth icon below the add to cart button</p>
                 <?php
                 } else {
                 ?>
-                    <p class="text-2xl font-semibold">Hello /user/, here's how your cart is looking:</p>
+                    <p class="text-2xl font-semibold">Hello /user/, here's your wishlist, fancy buying something?:</p>
                 <?php
                 }
-                foreach ($_SESSION['cart'] as $item_in_cart) {
-                    $query = "SELECT * FROM products WHERE id = :item_in_cart";
-                    $statement = $pdo->prepare($query);
-                    $statement->bindParam('item_in_cart', $item_in_cart['id'], PDO::PARAM_STR);
-                    $statement->execute();
-                    $product = $statement->fetch();
+                foreach ($productInWishlist as $wishlisted_item) {
                 ?>
-                    <div id="item_in_cart_<?= $product['id'] ?>" class="flex bg-gray-300 rounded-lg px-6 py-4 space-x-8 justify-between shadow-lg">
+                    <div id="item_in_cart_<?= $wishlisted_item['id'] ?>" class="flex bg-gray-300 rounded-lg px-6 py-4 space-x-8 justify-between shadow-lg">
                         <div class="flex space-x-8">
                             <div class="flex items-center h-[250px] w-[250px] object-cover">
-                                <img src="../images/categories/nfs-Unbound.png" alt="Image" class="rounded-lg w-[700px] object-cover">
+                                <img src="../../images/categories/<?= $wishlisted_item['image'] ?>" alt="Image" class="rounded-lg w-[700px] object-cover">
                             </div>
                             <div class="space-y-4 mt-4">
-                                <p class="text-3xl"><?= $product['name'] ?></p>
-                                <p class="text-xl"><?= $product['description'] ?></p>
-                                <p class="text-xl">$<?= $product['price'] ?></p>
+                                <p class="text-3xl"><?= $wishlisted_item['name'] ?></p>
+                                <p class="text-xl"><?= $wishlisted_item['description'] ?></p>
+                                <p class="text-xl">$<?= $wishlisted_item['price'] ?></p>
                             </div>
                         </div>
                         <div id="buttons" class="flex flex-col justify-center items-center space-y-4">
@@ -88,7 +97,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                                     </svg>
                                 </button>
                             </div>
-                            <p id="quantity_<?= $product['id'] ?>">Quantity: <?= $item_in_cart['quantity'] ?></p>
+                            <p id="quantity_<?= $product['id'] ?>">Quantity: <?= $wishlisted_item['quantity'] ?></p>
                             <div class="flex items-center justify-center w-fit h-fit space-x-4">
                                 <button id="removePiece" onclick="removePiece(<?= $product['id'] ?>)" class="px-4 py-2 bg-red-400 text-black rounded-lg shadow-lg hover:scale-105 hover:shadow-xl duration-300 my-auto">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

@@ -13,10 +13,10 @@ $price = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 $alreadyInCart = false;
 $itemQuantity = 1;
-foreach ($_SESSION['cart'] as &$item) {
-    if ($item['id'] == $itemID) {
-        $item['quantity'] += 1;
-        $itemQuantity = $item['quantity'];
+foreach ($_SESSION['cart'] as $index => $item) {
+    if ($_SESSION['cart'][$index]['id'] == $itemID) {
+        $_SESSION['cart'][$index]['quantity'] += 1;
+        $itemQuantity = $_SESSION['cart'][$index]['quantity'];
         $alreadyInCart = true;
     }
 }
@@ -30,5 +30,6 @@ foreach ($_SESSION['cart'] as $product) {
     $cartTotalPrice += $product['price'] * $product['quantity'];
     $quantity += $product['quantity'];
 }
+
 $itemsInCart = ['count'=> $quantity, 'price' => $cartTotalPrice, 'itemQuantity' => $itemQuantity ];
-echo json_encode($itemsInCart);;
+echo json_encode($itemsInCart);

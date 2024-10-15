@@ -19,16 +19,18 @@ $result = $statement->execute($parameters);
 $AlreadyFAV = $statement->fetch();
 
 if (!$AlreadyFAV) {
+    $status = true;
     $query = "INSERT INTO wishlists (user_id, product_id) values (:user_id , :itemID)";
     $parameters = ['user_id' => $user_id, 'itemID' => $itemID];
     $statement = $pdo->prepare($query);
     $result = $statement->execute($parameters);
 } else {
+    $status = false;
     $query = "DELETE FROM wishlists WHERE user_id = :user_id and product_id = :product_id";
-    $parameters = ['user_id' => $user_id, 'itemID' => $itemID];
+    $parameters = ['user_id' => $user_id, 'product_id' => $itemID];
     $statement = $pdo->prepare($query);
     $result = $statement->execute($parameters);
 }
 
-$itemsInWishlist = ['response' => true, 'itemID' => $itemID];
+$itemsInWishlist = ['response' => true, 'itemID' => $itemID, 'status' => $status];
 echo json_encode($itemsInWishlist);

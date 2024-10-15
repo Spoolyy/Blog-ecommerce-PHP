@@ -11,8 +11,8 @@ products.description as description,
 products.price as price,
 products.image as image
 FROM wishlists INNER JOIN products ON wishlists.product_id = products.id WHERE wishlists.user_id = :user_id';
-$statement->bindParam(':user_ID', $_SESSION['id'], PDO::PARAM_INT);
 $statement = $pdo->prepare($query);
+$statement->bindParam(':user_id', $_SESSION['id'], PDO::PARAM_INT);
 $statement->execute();
 $productInWishlist = $statement->fetchAll(PDO::FETCH_ASSOC);
 

@@ -83,6 +83,7 @@ $average_and_total = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <div class="flex space-x-4">
                     <p class="font-semibold hover:scale-105 duration-200"><a href="../index.php">Home</a></p>
                     <p class="font-semibold hover:scale-105 duration-200"><a href="./categories/index.php">Categories</a></p>
+                    <p class="font-semibold hover:scale-105 duration-200"><a href="../wishlists/index.php">Wishlist</a></p>
                 </div>
 
                 <div class="w-[140px] px-9 flex items-center justify-between relative">
@@ -132,10 +133,10 @@ $average_and_total = $statement->fetchAll(PDO::FETCH_ASSOC);
                         </form>
                         <div class="flex flex-col items-center justify-center space-y-2">
                             <button onclick="buy(<?= $product['id'] ?>)" class="bg-green-400 text-black p-2 rounded-lg text-xl">Add to cart</button>
-                            <button class="text-black p-1 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="#FF000077" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7 hover:scale-110 duration-150">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                                </svg>
+                            <button class="text-black p-1 rounded-lg" onclick="addToWishlist(<?= $product['id']?>)">
+                                    <svg id="isWishlisted_<?= $product['id'] ?>" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7 hover:scale-110 duration-150">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                    </svg>
                             </button>
                         </div>
 
@@ -158,6 +159,20 @@ $average_and_total = $statement->fetchAll(PDO::FETCH_ASSOC);
                 success: function(response) {
                     $("#itemsInCart").html(response.count)
                     $("#totalprice").html("Item total: $" + response.price)
+                }
+            })
+        }
+        function addToWishlist(id) {
+            $.ajax({
+                url: '../../ajax/add_to_wishlist.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    product: id,
+                },
+                success: function(response) {
+                    $('#isWishlisted_'+response.itemID).attr('fill', '#FF000077')
+                    
                 }
             })
         }

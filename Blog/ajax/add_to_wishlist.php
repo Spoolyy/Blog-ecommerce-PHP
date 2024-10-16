@@ -18,6 +18,7 @@ $statement = $pdo->prepare($query);
 $result = $statement->execute($parameters);
 $AlreadyFAV = $statement->fetch();
 
+
 if (!$AlreadyFAV) {
     $status = true;
     $query = "INSERT INTO wishlists (user_id, product_id) values (:user_id , :itemID)";
@@ -32,5 +33,10 @@ if (!$AlreadyFAV) {
     $result = $statement->execute($parameters);
 }
 
-$itemsInWishlist = ['response' => true, 'itemID' => $itemID, 'status' => $status];
+$query = 'SELECT * FROM wishlists';
+$statement = $pdo->prepare($query);
+$statement->execute();
+$itemsInWishlist = $statement->rowCount();
+
+$itemsInWishlist = ['response' => true, 'itemID' => $itemID, 'status' => $status, 'items'=> $itemsInWishlist];
 echo json_encode($itemsInWishlist);

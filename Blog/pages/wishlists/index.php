@@ -70,13 +70,14 @@ $productInWishlist = $statement->fetchAll(PDO::FETCH_ASSOC);
                 if (count($productInWishlist) == 0) {
                     $hasItem = false;
                 ?>
-                    <p class="text-2xl font-semibold">Hello /user/, there are no items in your wishlist.</p>
-                    <p>You can wishlist items by clicking the hearth icon below the add to cart button</p>
+                    <p id="itemCount" class="text-2xl font-semibold">Hello /user/, there are no items in your wishlist.</p>
+                    <p id="itemCountP">You can wishlist items by clicking the hearth icon below the add to cart button</p>
                 <?php
                 } else {
                     $hasItem = true;
                 ?>
-                    <p class="text-2xl font-semibold">Hello /user/, here's your wishlist, fancy buying something?:</p>
+                    <p id="itemCount" class="text-2xl font-semibold">Hello /user/, here's your wishlist, fancy buying something?:</p>
+                    <p id="itemCountP"></p>
                 <?php
                 }
                 foreach ($productInWishlist as $wishlisted_item) {
@@ -135,6 +136,10 @@ $productInWishlist = $statement->fetchAll(PDO::FETCH_ASSOC);
                 },
                 success: function(response) {
                     $('#item_in_wishlist_'+response.itemID).remove()
+                    if (response.items == 0) {
+                        $('#itemCount').html("Hello /user/, there are no items in your wishlist.")
+                        $('#itemCountP').html("You can wishlist items by clicking the hearth icon below the add to cart button")
+                    }
                 }
             })
         }

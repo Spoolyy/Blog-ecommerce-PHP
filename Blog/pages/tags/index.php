@@ -104,6 +104,5 @@ $tags = $statement->fetchAll(PDO::FETCH_ASSOC);
                 ?>
             </div>
         </div>
-            
     </div>
 </body>

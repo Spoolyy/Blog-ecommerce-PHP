@@ -18,6 +18,19 @@ $statement = $pdo->prepare($category_query);
 $statement->execute();
 $categories = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+$tags_query = 'SELECT id, name FROM tags';
+$statement = $pdo->prepare($tags_query);
+$statement->execute();
+$tags = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+$tags_products_query = 'SELECT tags.id as id, tags.name as name 
+from tags join product_tag join products 
+on product_tag.product_id = products.id and product_tag.tag_id = tags.id 
+where products.id = :product_id;';
+$parameters = ["product_id" => $id];
+$statement = $pdo->prepare($tags_products_query);
+$result = $statement->execute($parameters);
+$tags_product = $statement->fetchAll(PDO::FETCH_ASSOC);
 //var_dump($users);
 //header("Location: index.php");
 
@@ -34,6 +47,10 @@ $categories = $statement->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
@@ -82,11 +99,36 @@ $categories = $statement->fetchAll(PDO::FETCH_ASSOC);
                         <?php
                         foreach ($categories as $category) {
                         ?>
-                            <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                            <option <?php if ($products[0]['category_id']==$category['id']){
+                                echo 'SELECTED';
+                            }?>
+                            value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
                         <?php
                         }
                         ?>
                     </select>
+                </div>
+                <div id="tags" class="flex flex-col justify-center items-center space-y-1">
+                    <h1>Change or add tags:</h1>
+                    <select multiple name="tag_id" id="tagID">
+                        <?php
+                        foreach ($tags as $tag) {
+                        ?>
+                            <option value="<?= $tag['id'] ?>"><?= $tag['name'] ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                    <button onclick="addtag(<?= $products[0]['id'] ?>)" class="bg-green-600 text-white p-3 rounded-md shadow-lg">Add Tag</button>
+                    <div id="tagList">
+                    <?php
+                    foreach($tags_product as $tag_product){
+                        ?>
+                        <li><?= $tag_product['name']?></li>
+                    <?php
+                    }
+                    ?>
+                    </div>
                 </div>
                 <div id="image" class="flex flex-col justify-center items-center space-y-1">
                     <h1>Replace your image</h1>
@@ -97,6 +139,25 @@ $categories = $statement->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </form>
     </div>
+    <script>
+        function addtag(){
+            const tag_id = $('#tagID').val()
+            $.ajax({
+                url:'../../ajax/add_tag_to_product.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    product_id:product_id,
+                    tag_id:tag_id
+                },
+                success: function(response) {
+                    response.response.forEach(element => {
+                        
+                    });
+                }
+            })
+        }
+    </script>
 </body>
 
 </html>
